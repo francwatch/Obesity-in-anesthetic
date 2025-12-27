@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Anesthetics for obese patients (demo)</title>
+
   <style>
     :root{
       --bg:#f2f4f7;
@@ -11,7 +12,7 @@
       --text:#0f172a;
       --muted:#64748b;
       --border:#e5e7eb;
-      --shadow:0 10px 28px rgba(15, 23, 42, .12);
+      --shadow:0 10px 28px rgba(15,23,42,.12);
 
       --yellow:#fff3b0;
       --blue:#bfe6f6;
@@ -29,26 +30,36 @@
 
     *{ box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial; }
     body{ margin:0; background:var(--bg); color:var(--text); }
-    .wrap{ max-width:520px; margin: 26px auto 60px; padding: 0 14px; }
+
+    /* keep everything centered + not full-width */
+    .wrap{
+      width:min(720px, calc(100% - 28px));
+      margin:26px auto 64px;
+    }
 
     /* header */
     .top{
-      display:flex; align-items:center; justify-content:center;
-      gap:12px; margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:14px;
+      margin-bottom:16px;
     }
+    .topText{ text-align:left; }
+    h1{ margin:0; font-size:20px; line-height:1.2; }
+    .sub{ margin-top:6px; color:var(--muted); font-size:13px; line-height:1.4; }
+
     .logoImg{
-  width:52px;
-  height:52px;
-  border-radius:50%;   /* remove if you want full logo, no circle */
-  object-fit:cover;
-  background:#fff;
-  box-shadow:0 8px 18px rgba(0,0,0,.12);
+      width:52px;
+      height:52px;
+      border-radius:50%; /* remove if you want full logo (no circle crop) */
+      object-fit:cover;
+      background:#fff;
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+      border:1px solid rgba(0,0,0,.06);
     }
 
-    h1{ margin:0; font-size:20px; text-align:center; }
-    .sub{ text-align:center; margin:6px 0 18px; color:var(--muted); font-size:13px; }
-
-    /* main input card */
+    /* cards */
     .card{
       background:var(--card);
       border:1px solid var(--border);
@@ -56,8 +67,7 @@
       box-shadow:var(--shadow);
       padding:16px;
     }
-    .row{ display:flex; gap:12px; }
-    .row > div{ flex:1; }
+
     label{ display:block; font-size:13px; color:var(--muted); margin-bottom:6px; }
     input{
       width:100%;
@@ -66,11 +76,14 @@
       border:1px solid var(--border);
       font-size:15px;
       background:#fff;
+      outline:none;
     }
+    input:focus{ border-color:#93c5fd; box-shadow:0 0 0 3px rgba(59,130,246,.12); }
 
-    /* segmented gender */
+    /* gender segmented */
     .seg{
-      display:flex; gap:10px;
+      display:flex;
+      gap:10px;
       margin-bottom:12px;
     }
     .seg button{
@@ -79,9 +92,13 @@
       border-radius:10px;
       border:1px solid var(--border);
       background:#fff;
-      font-weight:700;
+      font-weight:800;
       cursor:pointer;
       user-select:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
     }
     .seg button.active{
       background:#3b82f6;
@@ -89,68 +106,97 @@
       color:#fff;
     }
 
-    /* action buttons */
+    /* input grid */
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+    }
+    @media (max-width: 640px){
+      .top{ justify-content:flex-start; }
+      .topText{ text-align:left; }
+      .grid2{ grid-template-columns:1fr; }
+    }
+
     .actions{ display:flex; gap:10px; margin-top:12px; }
     .btn{
       padding:10px 14px;
-      border-radius:8px;
+      border-radius:10px;
       border:1px solid transparent;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       user-select:none;
     }
     .btn.calc{ background:var(--btn); color:#fff; }
     .btn.reset{ background:var(--btn2); color:#fff; }
 
-    /* BMI line */
+    /* BMI meta */
     .meta{
-      margin: 16px 0 8px;
+      margin: 14px 0 6px;
       display:grid;
       gap:6px;
     }
     .metaRow{
-      display:flex; justify-content:space-between; align-items:center;
-      padding: 0 4px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding: 0 2px;
       font-size:14px;
     }
     .metaRow b{ font-weight:900; }
     .metaVal{ font-weight:900; color:#1d4ed8; }
 
-    /* Sections */
+    /* sections */
     .section{
-      border-radius:12px;
+      border-radius:14px;
       overflow:hidden;
       border:1px solid var(--border);
       margin-top:10px;
       background:#fff;
+      box-shadow:0 6px 18px rgba(15,23,42,.06);
     }
     .secHead{
       padding:10px 12px;
-      display:flex; align-items:center; justify-content:space-between;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       font-weight:900;
     }
-    .secBody{ padding: 8px 8px 10px; display:grid; gap:8px; }
+    .secBody{
+      padding: 10px;
+      display:grid;
+      gap:8px;
+    }
 
     .pill{
-      border-radius:10px;
+      border-radius:12px;
       padding:10px 12px;
-      display:flex; justify-content:space-between; gap:14px;
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
       align-items:flex-start;
       border:1px solid rgba(0,0,0,.06);
     }
-    .leftTitle{ font-weight:800; }
-    .hint{ display:block; margin-top:3px; font-size:12px; color:#334155; opacity:.85; }
+    .leftTitle{ font-weight:900; }
+    .hint{
+      display:block;
+      margin-top:4px;
+      font-size:12px;
+      color:#334155;
+      opacity:.85;
+      line-height:1.35;
+    }
     .dose{ font-weight:900; color:#0b3aa4; white-space:nowrap; }
+    .doseSmall{ display:block; font-size:12px; color:#0f172a; opacity:.8; text-align:right; margin-top:4px; }
 
-    /* color themes */
     .yellow .secHead, .yellow .pill{ background:var(--yellow); }
-    .blue   .secHead, .blue   .pill{ background:var(--blue); }
-    .red    .secHead, .red    .pill{ background:var(--red); }
+    .blue .secHead, .blue .pill{ background:var(--blue); }
+    .red .secHead, .red .pill{ background:var(--red); }
     .purple .secHead, .purple .pill{ background:var(--purple); }
-    .green  .pill{ background:var(--green); }
-    .soft   .pill{ background:var(--soft); }
+    .soft .secHead, .soft .pill{ background:var(--soft); }
+    .greenPill{ background:var(--green); }
 
-    /* iOS-style switch */
+    /* iOS switch */
     .switch{ position:relative; width:46px; height:26px; display:inline-block; }
     .switch input{ display:none; }
     .slider{
@@ -170,61 +216,71 @@
       box-shadow:0 2px 7px rgba(0,0,0,.25);
     }
     .switch input:checked + .slider{ background:var(--switchOn); }
-    .switch input:checked + .slider:before{ transform: translateX(20px); }
+    .switch input:checked + .slider:before{ transform:translateX(20px); }
 
-    /* equations block */
+    /* mini config inputs */
+    .miniGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width: 640px){
+      .miniGrid{ grid-template-columns:1fr; }
+    }
+    .miniCard{
+      background:#ffffffb8;
+      border:1px solid rgba(0,0,0,.08);
+      border-radius:12px;
+      padding:10px;
+    }
+
+    /* equations */
     .equations{
       background:#fff;
       border:1px dashed rgba(0,0,0,.25);
-      border-radius:12px;
+      border-radius:14px;
       padding:12px;
       font-size:12.5px;
       color:#334155;
-      line-height:1.5;
+      line-height:1.55;
     }
     .equations code{
       background:#f8fafc;
       border:1px solid var(--border);
       padding:2px 6px;
-      border-radius:8px;
+      border-radius:10px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-size:12px;
       white-space:nowrap;
     }
 
-    /* footer */
     footer{
       margin-top:18px;
       text-align:center;
       font-size:12px;
       color:#6b7280;
-      line-height:1.6;
+      line-height:1.65;
     }
     .warn{
       color:#b91c1c;
-      font-weight:900;
+      font-weight:1000;
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-  <div class="top">
-    <img src="anesCULogo.png"
-         alt="Chulalongkorn Anesthesiology Logo"
-         class="logoImg">
-    <div>
-      <h1>Anesthetics for obese patients</h1>
-      <div class="sub">
-        Demo calculator (BMI ≥ 30). Use clinical judgment.
+
+    <!-- HEADER -->
+    <div class="top">
+      <img src="anesCULogo.png" alt="Chulalongkorn Anesthesiology Logo" class="logoImg">
+      <div class="topText">
+        <h1>Anesthetics for obese patients</h1>
+        <div class="sub">Demo calculator (BMI ≥ 30). Use clinical judgment.</div>
       </div>
     </div>
-  </div>
-</div>
 
-
-
-    <!-- INPUT CARD -->
+    <!-- INPUT -->
     <div class="card">
       <label>Gender :</label>
       <div class="seg">
@@ -232,7 +288,7 @@
         <button id="femaleBtn" class="active" type="button">👩🏻 Female</button>
       </div>
 
-      <div class="row">
+      <div class="grid2">
         <div>
           <label>Weight (kg):</label>
           <input id="w" type="number" step="0.1" value="59">
@@ -360,7 +416,7 @@
         </label>
       </div>
       <div class="secBody" id="revBody">
-        <div class="pill soft" style="border:1px dashed rgba(185,28,28,.7)">
+        <div class="pill" style="border:1px dashed rgba(185,28,28,.7)">
           <div>
             <span class="leftTitle">Neostigmine</span>
             <span class="hint">(0.05 mg/kg AdjBW)</span>
@@ -368,7 +424,7 @@
           <div class="dose" id="neo">—</div>
         </div>
 
-        <div class="pill green">
+        <div class="pill greenPill">
           <div>
             <span class="leftTitle">Atropine</span>
             <span class="hint">(0.02 mg/kg AdjBW)</span>
@@ -376,7 +432,7 @@
           <div class="dose" id="atrop">—</div>
         </div>
 
-        <div class="pill green">
+        <div class="pill greenPill">
           <div>
             <span class="leftTitle">Glycopyrrolate</span>
             <span class="hint">(0.01 mg/kg AdjBW)</span>
@@ -384,7 +440,7 @@
           <div class="dose" id="glyco">—</div>
         </div>
 
-        <div class="pill soft" style="border:1px dashed rgba(185,28,28,.7)">
+        <div class="pill" style="border:1px dashed rgba(185,28,28,.7)">
           <div>
             <span class="leftTitle">Sugammadex</span>
             <span class="hint">(2–4 mg/kg AdjBW)</span>
@@ -403,7 +459,23 @@
           <span class="slider"></span>
         </label>
       </div>
+
       <div class="secBody" id="otherBody">
+
+        <!-- Practical drip defaults -->
+        <div class="miniGrid">
+          <div class="miniCard">
+            <label>Remifentanil concentration (mcg/mL)</label>
+            <input id="remiConc" type="number" step="0.1" value="50">
+            <div class="hint">Example: 2 mg in 40 mL → 50 mcg/mL</div>
+          </div>
+          <div class="miniCard">
+            <label>Dexmedetomidine concentration (mcg/mL)</label>
+            <input id="dexConc" type="number" step="0.1" value="4">
+            <div class="hint">Example: 200 mcg in 50 mL → 4 mcg/mL</div>
+          </div>
+        </div>
+
         <div class="pill">
           <div><span class="leftTitle">Etomidate</span><span class="hint">(0.2–0.3 mg/kg LBW)</span></div>
           <div class="dose" id="eto">—</div>
@@ -420,19 +492,41 @@
           <div><span class="leftTitle">Midazolam</span><span class="hint">(0.05–0.1 mg/kg LBW)</span></div>
           <div class="dose" id="mida">—</div>
         </div>
+
+        <!-- Dex (loading) stays -->
         <div class="pill">
           <div><span class="leftTitle">Dexmedetomidine (loading)</span><span class="hint">(0.5–1 mcg/kg LBW)</span></div>
-          <div class="dose" id="dex">—</div>
+          <div class="dose" id="dexLoad">—</div>
         </div>
+
+        <!-- NEW: Dex drip -->
+        <div class="pill">
+          <div>
+            <span class="leftTitle">Dexmedetomidine (maintenance drip)</span>
+            <span class="hint">(0.2–0.7 mcg/kg/hr LBW)</span>
+          </div>
+          <div class="dose" id="dexDrip">—<span class="doseSmall" id="dexDripMl">—</span></div>
+        </div>
+
         <div class="pill">
           <div><span class="leftTitle">Morphine</span><span class="hint">(0.05–0.1 mg/kg LBW)</span></div>
           <div class="dose" id="morph">—</div>
         </div>
+
+        <!-- NEW: Remi drip -->
+        <div class="pill">
+          <div>
+            <span class="leftTitle">Remifentanil (drip)</span>
+            <span class="hint">(0.05–0.2 mcg/kg/min LBW)</span>
+          </div>
+          <div class="dose" id="remiDrip">—<span class="doseSmall" id="remiDripMl">—</span></div>
+        </div>
+
       </div>
     </div>
 
     <!-- 6 Additional info -->
-    <div class="section" style="border:none; background:transparent;">
+    <div class="section" style="border:none; background:transparent; box-shadow:none;">
       <div class="secHead" style="background:transparent; padding:12px 2px 8px; font-weight:900;">
         <div>6. Addition information</div>
         <label class="switch">
@@ -460,15 +554,18 @@
         </div>
 
         <div class="equations">
-          <div style="font-weight:900; margin-bottom:6px;">Equations used (shown for transparency)</div>
+          <div style="font-weight:1000; margin-bottom:6px;">Equations used (shown for transparency)</div>
           <div><b>BMI</b> = <code>TBW / (height_m²)</code></div>
-          <div style="margin-top:6px;"><b>IBW / PBW (Devine)</b></div>
+
+          <div style="margin-top:8px;"><b>IBW / PBW (Devine)</b></div>
           <div>Male: <code>50 + 2.3 × (height_in − 60)</code></div>
           <div>Female: <code>45.5 + 2.3 × (height_in − 60)</code></div>
-          <div style="margin-top:6px;"><b>LBW (Janmahasatian)</b></div>
+
+          <div style="margin-top:8px;"><b>LBW (Janmahasatian)</b></div>
           <div>Male: <code>(9270×TBW) / (6680 + 216×BMI)</code></div>
           <div>Female: <code>(9270×TBW) / (8780 + 244×BMI)</code></div>
-          <div style="margin-top:6px;"><b>AdjBW</b> = <code>IBW + 0.4×(TBW−IBW)</code></div>
+
+          <div style="margin-top:8px;"><b>AdjBW</b> = <code>IBW + 0.4×(TBW−IBW)</code></div>
         </div>
       </div>
     </div>
@@ -476,176 +573,195 @@
     <footer>
       <div class="warn">DEMO VERSION — all calculations must be rechecked before clinical use.</div>
       <div>Not an official guideline. For education + prototyping only.</div>
-      <div>© 2025 (your name/department here) • Version 0.1</div>
+      <div>© 2025 Department of Anesthesiology, Chulalongkorn Hospital • Version 0.2</div>
     </footer>
+
   </div>
 
-<script>
-  // ---------------------------
-  // Core state
-  // ---------------------------
-  let gender = "female";
+  <script>
+    // ---------------------------
+    // State
+    // ---------------------------
+    let gender = "female";
+    const el = (id) => document.getElementById(id);
 
-  const el = (id) => document.getElementById(id);
+    const maleBtn = el("maleBtn");
+    const femaleBtn = el("femaleBtn");
+    const wInput = el("w");
+    const hInput = el("h");
 
-  // buttons
-  const maleBtn = el("maleBtn");
-  const femaleBtn = el("femaleBtn");
-  const wInput = el("w");
-  const hInput = el("h");
+    function setGender(g){
+      gender = g;
+      maleBtn.classList.toggle("active", g==="male");
+      femaleBtn.classList.toggle("active", g==="female");
+    }
+    maleBtn.addEventListener("click", ()=>{ setGender("male"); calculate(); });
+    femaleBtn.addEventListener("click", ()=>{ setGender("female"); calculate(); });
 
-  function setGender(g){
-    gender = g;
-    maleBtn.classList.toggle("active", g==="male");
-    femaleBtn.classList.toggle("active", g==="female");
-  }
-
-  maleBtn.addEventListener("click", ()=>{ setGender("male"); });
-  femaleBtn.addEventListener("click", ()=>{ setGender("female"); });
-
-  // ---------------------------
-  // Weight formulas
-  // ---------------------------
-  function bmi(tbw, heightCm){
-    const hm = heightCm/100;
-    return tbw/(hm*hm);
-  }
-
-  function ibw_devine(heightCm, gender){
-    const hin = heightCm/2.54;
-    const base = (gender==="male") ? 50 : 45.5;
-    return base + 2.3 * Math.max(0, hin - 60);
-  }
-
-  function lbw_janma(tbw, heightCm, gender){
-    const B = bmi(tbw, heightCm);
-    if (gender==="male") return (9270*tbw)/(6680 + 216*B);
-    return (9270*tbw)/(8780 + 244*B);
-  }
-
-  function adjbw(tbw, ibw){
-    return ibw + 0.4*(tbw-ibw);
-  }
-
-  // display helpers
-  const r0 = (x) => Math.round(x);
-  const one = (x) => Math.round(x*10)/10;
-
-  function range(a,b,unit){ return `${r0(a)} - ${r0(b)} ${unit}`; }
-  function single(x,unit){ return `${r0(x)} ${unit}`; }
-
-  // ---------------------------
-  // BMI category (matches your screenshot style)
-  // ---------------------------
-  function bmiCategory(B){
-    if (B >= 40) return "Obese GRADE III / Morbidly Obese";
-    if (B >= 35) return "Obese GRADE II";
-    if (B >= 30) return "Obese GRADE I";
-    return "Not obese (BMI < 30)";
-  }
-
-  // ---------------------------
-  // Calculate all outputs
-  // ---------------------------
-  function calculate(){
-    const w = Number(wInput.value);
-    const h = Number(hInput.value);
-
-    if(!w || !h){
-      el("bmiVal").textContent = "—";
-      el("bmiCat").textContent = "—";
-      return;
+    // ---------------------------
+    // Weight formulas
+    // ---------------------------
+    function bmi(tbw, heightCm){
+      const hm = heightCm/100;
+      return tbw/(hm*hm);
+    }
+    function ibw_devine(heightCm, gender){
+      const hin = heightCm/2.54;
+      const base = (gender==="male") ? 50 : 45.5;
+      return base + 2.3 * Math.max(0, hin - 60);
+    }
+    function lbw_janma(tbw, heightCm, gender){
+      const B = bmi(tbw, heightCm);
+      if (gender==="male") return (9270*tbw)/(6680 + 216*B);
+      return (9270*tbw)/(8780 + 244*B);
+    }
+    function adjbw(tbw, ibw){
+      return ibw + 0.4*(tbw-ibw);
     }
 
-    const B = bmi(w,h);
-    const IBW = ibw_devine(h, gender);
-    const LBW = lbw_janma(w,h, gender);
-    const ADJ = adjbw(w, IBW);
-    const PBW = IBW; // same Devine used here
+    // display helpers
+    const r0 = (x) => Math.round(x);
+    const one = (x) => Math.round(x*10)/10;
+    function range(a,b,unit){ return `${r0(a)} - ${r0(b)} ${unit}`; }
+    function single(x,unit){ return `${r0(x)} ${unit}`; }
+    function safeNum(v, fallback){
+      const n = Number(v);
+      return (Number.isFinite(n) && n>0) ? n : fallback;
+    }
 
-    el("bmiVal").textContent = one(B);
-    el("bmiCat").textContent = bmiCategory(B);
+    // BMI category
+    function bmiCategory(B){
+      if (B >= 40) return "Obese GRADE III / Morbidly Obese";
+      if (B >= 35) return "Obese GRADE II";
+      if (B >= 30) return "Obese GRADE I";
+      return "Not obese (BMI < 30)";
+    }
 
-    // 1) Propofol
-    el("propInd").textContent = range(1.5*LBW, 2.5*LBW, "mg");
-    // infusion: mcg/kg/min -> mg/hr
-    const gaLow  = (100*ADJ)*60/1000;
-    const gaHigh = (200*ADJ)*60/1000;
-    el("propGA").textContent = range(gaLow, gaHigh, "mg/hr");
+    // ---------------------------
+    // toggles
+    // ---------------------------
+    function bindToggle(togId, bodyId){
+      const t = el(togId);
+      const b = el(bodyId);
+      const apply = () => b.style.display = t.checked ? "grid" : "none";
+      t.addEventListener("change", apply);
+      apply();
+    }
+    bindToggle("togProp","propBody");
+    bindToggle("togFent","fentBody");
+    bindToggle("togNMB","nmbBody");
+    bindToggle("togRev","revBody");
+    bindToggle("togOther","otherBody");
+    bindToggle("togInfo","infoBody");
 
-    const sedLow  = (25*ADJ)*60/1000;
-    const sedHigh = (100*ADJ)*60/1000;
-    el("propSed").textContent = range(sedLow, sedHigh, "mg/hr");
+    // ---------------------------
+    // main calculate
+    // ---------------------------
+    function calculate(){
+      const w = Number(wInput.value);
+      const h = Number(hInput.value);
 
-    // 2) Fentanyl
-    el("fentBolus").textContent = range(1*LBW, 2*LBW, "mcg");
+      if(!w || !h){
+        el("bmiVal").textContent = "—";
+        el("bmiCat").textContent = "—";
+        return;
+      }
 
-    // 3) NMB
-    el("sux").textContent  = single(1*w, "mg");
-    el("atra").textContent = single(0.6*LBW, "mg");
-    el("cisa").textContent = single(0.15*LBW, "mg");
-    el("rocu").textContent = range(0.6*LBW, 0.9*LBW, "mg");
+      const B = bmi(w,h);
+      const IBW = ibw_devine(h, gender);
+      const LBW = lbw_janma(w,h, gender);
+      const ADJ = adjbw(w, IBW);
+      const PBW = IBW;
 
-    // 4) Reversal (AdjBW)
-    el("neo").textContent   = single(0.05*ADJ, "mg");
-    el("atrop").textContent = single(0.02*ADJ, "mg");
-    el("glyco").textContent = single(0.01*ADJ, "mg");
-    el("suga").textContent  = range(2*ADJ, 4*ADJ, "mg");
+      el("bmiVal").textContent = one(B);
+      el("bmiCat").textContent = bmiCategory(B);
 
-    // 5) Other meds (LBW-based here)
-    el("eto").textContent   = range(0.2*LBW, 0.3*LBW, "mg");
-    el("thio").textContent  = range(3*LBW, 5*LBW, "mg");
-    el("keta").textContent  = range(0.5*LBW, 1*LBW, "mg");
-    el("mida").textContent  = range(0.05*LBW, 0.1*LBW, "mg");
-    el("dex").textContent   = range(0.5*LBW, 1*LBW, "mcg");
-    el("morph").textContent = range(0.05*LBW, 0.1*LBW, "mg");
+      // Propofol
+      el("propInd").textContent = range(1.5*LBW, 2.5*LBW, "mg");
+      const gaLow  = (100*ADJ)*60/1000;  // mcg/kg/min -> mg/hr
+      const gaHigh = (200*ADJ)*60/1000;
+      el("propGA").textContent = range(gaLow, gaHigh, "mg/hr");
 
-    // 6) Weights
-    el("ibw").textContent = `${one(IBW)} kg`;
-    el("lbw").textContent = `${one(LBW)} kg`;
-    el("adj").textContent = `${one(ADJ)} kg`;
-    el("pbw").textContent = `${one(PBW)} kg`;
-  }
+      const sedLow  = (25*ADJ)*60/1000;
+      const sedHigh = (100*ADJ)*60/1000;
+      el("propSed").textContent = range(sedLow, sedHigh, "mg/hr");
 
-  // ---------------------------
-  // Section toggles
-  // ---------------------------
-  function bindToggle(togId, bodyId){
-    const t = el(togId);
-    const b = el(bodyId);
-    const apply = () => b.style.display = t.checked ? "grid" : "none";
-    t.addEventListener("change", apply);
-    apply();
-  }
-  bindToggle("togProp","propBody");
-  bindToggle("togFent","fentBody");
-  bindToggle("togNMB","nmbBody");
-  bindToggle("togRev","revBody");
-  bindToggle("togOther","otherBody");
-  bindToggle("togInfo","infoBody");
+      // Fentanyl
+      el("fentBolus").textContent = range(1*LBW, 2*LBW, "mcg");
 
-  // ---------------------------
-  // Buttons
-  // ---------------------------
-  el("calcBtn").addEventListener("click", calculate);
+      // NMB
+      el("sux").textContent  = single(1*w, "mg");
+      el("atra").textContent = single(0.6*LBW, "mg");
+      el("cisa").textContent = single(0.15*LBW, "mg");
+      el("rocu").textContent = range(0.6*LBW, 0.9*LBW, "mg");
 
-  el("resetBtn").addEventListener("click", ()=>{
-    wInput.value = "";
-    hInput.value = "";
-    el("bmiVal").textContent = "—";
-    el("bmiCat").textContent = "—";
-  });
+      // Reversal (AdjBW)
+      el("neo").textContent   = single(0.05*ADJ, "mg");
+      el("atrop").textContent = single(0.02*ADJ, "mg");
+      el("glyco").textContent = single(0.01*ADJ, "mg");
+      el("suga").textContent  = range(2*ADJ, 4*ADJ, "mg");
 
-  // Optional: auto-calc when editing
-  wInput.addEventListener("input", calculate);
-  hInput.addEventListener("input", calculate);
+      // Other meds (LBW-based here)
+      el("eto").textContent   = range(0.2*LBW, 0.3*LBW, "mg");
+      el("thio").textContent  = range(3*LBW, 5*LBW, "mg");
+      el("keta").textContent  = range(0.5*LBW, 1*LBW, "mg");
+      el("mida").textContent  = range(0.05*LBW, 0.1*LBW, "mg");
 
-  // Also recalc when switching gender
-  maleBtn.addEventListener("click", calculate);
-  femaleBtn.addEventListener("click", calculate);
+      // Dex loading
+      el("dexLoad").textContent = range(0.5*LBW, 1*LBW, "mcg");
 
-  // Initial render
-  calculate();
-</script>
+      // Dex maintenance drip: 0.2–0.7 mcg/kg/hr (LBW)
+      const dexLow_mcg_hr = 0.2 * LBW;
+      const dexHigh_mcg_hr = 0.7 * LBW;
+      el("dexDrip").firstChild.nodeValue = `${r0(dexLow_mcg_hr)} - ${r0(dexHigh_mcg_hr)} mcg/hr`;
+
+      const dexConc = safeNum(el("dexConc")?.value, 4); // mcg/mL
+      const dexLow_ml_hr = dexLow_mcg_hr / dexConc;
+      const dexHigh_ml_hr = dexHigh_mcg_hr / dexConc;
+      el("dexDripMl").textContent = `(${one(dexLow_ml_hr)}–${one(dexHigh_ml_hr)} mL/hr @ ${dexConc} mcg/mL)`;
+
+      // Morphine
+      el("morph").textContent = range(0.05*LBW, 0.1*LBW, "mg");
+
+      // Remifentanil drip: 0.05–0.2 mcg/kg/min (LBW)
+      const remiLow_mcg_min = 0.05 * LBW;
+      const remiHigh_mcg_min = 0.2 * LBW;
+      const remiLow_mcg_hr = remiLow_mcg_min * 60;
+      const remiHigh_mcg_hr = remiHigh_mcg_min * 60;
+      el("remiDrip").firstChild.nodeValue =
+        `${one(remiLow_mcg_min)}–${one(remiHigh_mcg_min)} mcg/min`;
+
+      const remiConc = safeNum(el("remiConc")?.value, 50); // mcg/mL
+      const remiLow_ml_hr = remiLow_mcg_hr / remiConc;
+      const remiHigh_ml_hr = remiHigh_mcg_hr / remiConc;
+      el("remiDripMl").textContent =
+        `(${one(remiLow_mcg_hr)}–${one(remiHigh_mcg_hr)} mcg/hr; ${one(remiLow_ml_hr)}–${one(remiHigh_ml_hr)} mL/hr @ ${remiConc} mcg/mL)`;
+
+      // Weights
+      el("ibw").textContent = `${one(IBW)} kg`;
+      el("lbw").textContent = `${one(LBW)} kg`;
+      el("adj").textContent = `${one(ADJ)} kg`;
+      el("pbw").textContent = `${one(PBW)} kg`;
+    }
+
+    // buttons
+    el("calcBtn").addEventListener("click", calculate);
+    el("resetBtn").addEventListener("click", ()=>{
+      wInput.value = "";
+      hInput.value = "";
+      el("bmiVal").textContent = "—";
+      el("bmiCat").textContent = "—";
+    });
+
+    // auto-calc on input
+    wInput.addEventListener("input", calculate);
+    hInput.addEventListener("input", calculate);
+    el("remiConc").addEventListener("input", calculate);
+    el("dexConc").addEventListener("input", calculate);
+
+    // init
+    setGender("female");
+    calculate();
+  </script>
 </body>
 </html>
