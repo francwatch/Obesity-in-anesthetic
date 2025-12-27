@@ -179,4 +179,243 @@
       </div>
 
       <div class="row">
-        <button clas
+        <button class="btn primary" id="calcBtn">Calculate</button>
+        <button class="btn" id="resetBtn">Reset</button>
+      </div>
+
+      <div id="summary" class="summary hide"></div>
+      <div class="mutedline">* Formulas below are placeholders (you can replace with your department’s preferred IBW/LBW/AdjBW formulas).</div>
+    </div>
+  </div>
+
+  <!-- 1. Propofol -->
+  <div class="section yellow" id="secProp">
+    <div class="head">
+      <div>1. Propofol</div>
+      <label class="switch">
+        <input type="checkbox" id="togProp" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="body" id="propBody">
+      <div class="pill">
+        <div>
+          <div><b>Induction</b></div>
+          <small>(1.5–2.5 mg/kg LBW)</small>
+        </div>
+        <div class="dose" id="propInd">—</div>
+      </div>
+      <div class="pill">
+        <div>
+          <div><b>Infusion (GA)</b></div>
+          <small>(100–200 mcg/kg/min AdjBW)</small>
+        </div>
+        <div class="dose" id="propGA">—</div>
+      </div>
+      <div class="pill">
+        <div>
+          <div><b>Infusion (Sedation)</b></div>
+          <small>(25–100 mcg/kg/min AdjBW)</small>
+        </div>
+        <div class="dose" id="propSed">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Fentanyl -->
+  <div class="section blue" id="secFent">
+    <div class="head">
+      <div>2. Fentanyl</div>
+      <label class="switch">
+        <input type="checkbox" id="togFent" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="body" id="fentBody">
+      <div class="pill">
+        <div>
+          <div><b>Bolus</b></div>
+          <small>(1–2 mcg/kg LBW)</small>
+        </div>
+        <div class="dose" id="fentBolus">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Muscle relaxant -->
+  <div class="section red" id="secNMB">
+    <div class="head">
+      <div>3. Muscle relaxant</div>
+      <label class="switch">
+        <input type="checkbox" id="togNMB" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="body" id="nmbBody">
+      <div class="pill">
+        <div>
+          <div><b>Succinylcholine</b></div>
+          <small>(1 mg/kg TBW)</small>
+        </div>
+        <div class="dose" id="sux">—</div>
+      </div>
+
+      <div class="pill">
+        <div>
+          <div><b>Atracurium</b></div>
+          <small>(0.6 mg/kg LBW)</small>
+        </div>
+        <div class="dose" id="atra">—</div>
+      </div>
+
+      <div class="pill">
+        <div>
+          <div><b>Cisatracurium</b></div>
+          <small>(0.15 mg/kg LBW)</small>
+        </div>
+        <div class="dose" id="cisa">—</div>
+      </div>
+
+      <div class="pill">
+        <div>
+          <div><b>Rocuronium</b></div>
+          <small>(0.6–0.9 mg/kg LBW)</small>
+        </div>
+        <div class="dose" id="rocu">—</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Reversal agent (placeholder) -->
+  <div class="section purple" id="secRev">
+    <div class="head">
+      <div>4. Reversal agent</div>
+      <label class="switch">
+        <input type="checkbox" id="togRev">
+        <span class="slider"></span>
+      </label>
+    </div>
+    <div class="body" id="revBody" style="display:none;">
+      <div class="pill">
+        <div>
+          <div><b>Coming soon</b></div>
+          <small>Add sugammadex / neostigmine rules here</small>
+        </div>
+        <div class="dose">—</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ====== Gender toggle ======
+  let gender = "female";
+  const maleBtn = document.getElementById("maleBtn");
+  const femaleBtn = document.getElementById("femaleBtn");
+
+  function setGender(g){
+    gender = g;
+    maleBtn.classList.toggle("active", g==="male");
+    femaleBtn.classList.toggle("active", g==="female");
+  }
+  maleBtn.onclick = () => setGender("male");
+  femaleBtn.onclick = () => setGender("female");
+
+  // ====== Placeholder weight scalars ======
+  // Replace these with the exact formulas you want later.
+  function calcIBW(heightCm, gender){
+    const hIn = heightCm / 2.54;
+    // Devine
+    if (gender === "male") return 50 + 2.3 * Math.max(0, hIn - 60);
+    return 45.5 + 2.3 * Math.max(0, hIn - 60);
+  }
+  function calcLBW(tbw, heightCm, gender){
+    // Janmahasatian
+    const hM = heightCm / 100;
+    const bmi = tbw / (hM*hM);
+    if (gender === "male") return (9270 * tbw) / (6680 + 216 * bmi);
+    return (9270 * tbw) / (8780 + 244 * bmi);
+  }
+  function calcAdjBW(tbw, ibw){
+    return ibw + 0.4 * (tbw - ibw);
+  }
+
+  function fmtRange(a,b,unit){
+    return `${Math.round(a)} – ${Math.round(b)} ${unit}`;
+  }
+  function fmt(x, unit){ return `${Math.round(x)} ${unit}`; }
+
+  // ====== Calculate + fill outputs ======
+  function calculateAll(){
+    const w = Number(document.getElementById("w").value);
+    const h = Number(document.getElementById("h").value);
+    if(!w || !h) return;
+
+    const hM = h/100;
+    const bmi = w/(hM*hM);
+    const ibw = calcIBW(h, gender);
+    const lbw = calcLBW(w, h, gender);
+    const adj = calcAdjBW(w, ibw);
+
+    // Summary
+    const summary = document.getElementById("summary");
+    summary.classList.remove("hide");
+    summary.innerHTML = `
+      <div><b>BMI:</b> ${bmi.toFixed(1)}</div>
+      <div><b>IBW:</b> ${ibw.toFixed(1)} kg &nbsp; <b>LBW:</b> ${lbw.toFixed(1)} kg &nbsp; <b>AdjBW:</b> ${adj.toFixed(1)} kg</div>
+    `;
+
+    // Propofol
+    document.getElementById("propInd").textContent = fmtRange(1.5*lbw, 2.5*lbw, "mg");
+    // mcg/kg/min * kg -> mcg/min ; convert to mg/hr: (mcg/min)*60 /1000
+    const gaLow = (100*adj)*60/1000;
+    const gaHigh= (200*adj)*60/1000;
+    document.getElementById("propGA").textContent = fmtRange(gaLow, gaHigh, "mg/hr");
+
+    const sedLow = (25*adj)*60/1000;
+    const sedHigh= (100*adj)*60/1000;
+    document.getElementById("propSed").textContent = fmtRange(sedLow, sedHigh, "mg/hr");
+
+    // Fentanyl
+    document.getElementById("fentBolus").textContent = fmtRange(1*lbw, 2*lbw, "mcg");
+
+    // NMB
+    document.getElementById("sux").textContent  = fmt(1*w, "mg");
+    document.getElementById("atra").textContent = fmt(0.6*lbw, "mg");
+    document.getElementById("cisa").textContent = fmt(0.15*lbw, "mg");
+    document.getElementById("rocu").textContent = fmtRange(0.6*lbw, 0.9*lbw, "mg");
+  }
+
+  document.getElementById("calcBtn").onclick = calculateAll;
+  document.getElementById("resetBtn").onclick = () => {
+    document.getElementById("w").value = "";
+    document.getElementById("h").value = "";
+    document.getElementById("summary").classList.add("hide");
+    // clear outputs
+    ["propInd","propGA","propSed","fentBolus","sux","atra","cisa","rocu"].forEach(id=>{
+      document.getElementById(id).textContent = "—";
+    });
+  };
+
+  // ====== Toggle section visibility ======
+  function bindToggle(togId, bodyId){
+    const tog = document.getElementById(togId);
+    const body = document.getElementById(bodyId);
+    const apply = () => body.style.display = tog.checked ? "grid" : "none";
+    tog.addEventListener("change", apply);
+    apply();
+  }
+  bindToggle("togProp","propBody");
+  bindToggle("togFent","fentBody");
+  bindToggle("togNMB","nmbBody");
+
+  // Reversal placeholder toggle
+  const togRev = document.getElementById("togRev");
+  const revBody = document.getElementById("revBody");
+  togRev.addEventListener("change", ()=> revBody.style.display = togRev.checked ? "grid" : "none");
+
+  // Initial calculation on load (optional)
+  calculateAll();
+</script>
+</body>
+</html>
