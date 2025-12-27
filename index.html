@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anesthetics for Obese Patients</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial;
+      background: #f4f6f8;
+    }
+    header {
+      text-align: center;
+      padding: 16px;
+      background: white;
+    }
+    .card {
+      max-width: 420px;
+      margin: 16px auto;
+      background: white;
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 8px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      margin-top: 12px;
+    }
+    .result {
+      margin-top: 12px;
+      padding: 12px;
+      background: #eef2ff;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>Anesthetics for Obese Patients</h2>
+  <p>BMI ≥ 30 calculator</p>
+</header>
+
+<div class="card">
+  <label>Weight (kg)</label>
+  <input id="w" type="number" step="0.1" value="74.3">
+
+  <label>Height (cm)</label>
+  <input id="h" type="number" step="0.1" value="158">
+
+  <button onclick="calc()">Calculate</button>
+
+  <div id="out" class="result" style="display:none"></div>
+</div>
+
+<script>
+function calc() {
+  const w = Number(document.getElementById("w").value);
+  const h = Number(document.getElementById("h").value) / 100;
+  const bmi = w / (h * h);
+
+  let cat = "Normal";
+  if (bmi >= 30) cat = "Obese";
+  if (bmi >= 35) cat = "Obese Class II";
+  if (bmi >= 40) cat = "Obese Class III / Morbidly Obese";
+
+  const out = document.getElementById("out");
+  out.style.display = "block";
+  out.innerHTML = `<b>BMI:</b> ${bmi.toFixed(1)}<br><b>Category:</b> ${cat}`;
+}
+</script>
+
+</body>
+</html>
