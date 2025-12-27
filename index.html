@@ -18,20 +18,23 @@
       --blue:#bfe6f6;
       --red:#ffb2b7;
       --purple:#d6c9ff;
-      --green:#dff7cf;
       --soft:#fff7e6;
+      --green:#dff7cf;
 
       --btn:#16a34a;
       --btn2:#9ca3af;
 
       --switchOff:#cbd5e1;
       --switchOn:#3b82f6;
+
+      --brandPink:#ec4899;
+      --brandPink2:#fb7185;
     }
 
     *{ box-sizing:border-box; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial; }
     body{ margin:0; background:var(--bg); color:var(--text); }
 
-    /* keep everything centered + not full-width */
+    /* keep everything centered + not full width */
     .wrap{
       width:min(720px, calc(100% - 28px));
       margin:26px auto 64px;
@@ -49,14 +52,22 @@
     h1{ margin:0; font-size:20px; line-height:1.2; }
     .sub{ margin-top:6px; color:var(--muted); font-size:13px; line-height:1.4; }
 
-    .logoImg{
-      width:52px;
-      height:52px;
-      border-radius:50%; /* remove if you want full logo (no circle crop) */
-      object-fit:cover;
-      background:#fff;
-      box-shadow:0 8px 18px rgba(0,0,0,.12);
-      border:1px solid rgba(0,0,0,.06);
+    /* CSS logo badge (no image loading issues) */
+    .logoBadge{
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:1000;
+      letter-spacing:.2px;
+      color:#fff;
+      background:linear-gradient(135deg,var(--brandPink),var(--brandPink2));
+      box-shadow:0 10px 22px rgba(236,72,153,.25), 0 6px 14px rgba(15,23,42,.12);
+      border:1px solid rgba(255,255,255,.45);
+      user-select:none;
+      font-size:13px;
     }
 
     /* cards */
@@ -92,7 +103,7 @@
       border-radius:10px;
       border:1px solid var(--border);
       background:#fff;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       user-select:none;
       display:flex;
@@ -114,7 +125,6 @@
     }
     @media (max-width: 640px){
       .top{ justify-content:flex-start; }
-      .topText{ text-align:left; }
       .grid2{ grid-template-columns:1fr; }
     }
 
@@ -144,7 +154,7 @@
       font-size:14px;
     }
     .metaRow b{ font-weight:900; }
-    .metaVal{ font-weight:900; color:#1d4ed8; }
+    .metaVal{ font-weight:1000; color:#1d4ed8; }
 
     /* sections */
     .section{
@@ -160,7 +170,7 @@
       display:flex;
       align-items:center;
       justify-content:space-between;
-      font-weight:900;
+      font-weight:1000;
     }
     .secBody{
       padding: 10px;
@@ -177,7 +187,7 @@
       align-items:flex-start;
       border:1px solid rgba(0,0,0,.06);
     }
-    .leftTitle{ font-weight:900; }
+    .leftTitle{ font-weight:1000; }
     .hint{
       display:block;
       margin-top:4px;
@@ -186,7 +196,7 @@
       opacity:.85;
       line-height:1.35;
     }
-    .dose{ font-weight:900; color:#0b3aa4; white-space:nowrap; }
+    .dose{ font-weight:1000; color:#0b3aa4; white-space:nowrap; text-align:right; }
     .doseSmall{ display:block; font-size:12px; color:#0f172a; opacity:.8; text-align:right; margin-top:4px; }
 
     .yellow .secHead, .yellow .pill{ background:var(--yellow); }
@@ -273,7 +283,7 @@
 
     <!-- HEADER -->
     <div class="top">
-      <img src="anesCULogo.png" alt="Chulalongkorn Anesthesiology Logo" class="logoImg">
+      <div class="logoBadge">AnesCU</div>
       <div class="topText">
         <h1>Anesthetics for obese patients</h1>
         <div class="sub">Demo calculator (BMI ≥ 30). Use clinical judgment.</div>
@@ -493,19 +503,21 @@
           <div class="dose" id="mida">—</div>
         </div>
 
-        <!-- Dex (loading) stays -->
         <div class="pill">
           <div><span class="leftTitle">Dexmedetomidine (loading)</span><span class="hint">(0.5–1 mcg/kg LBW)</span></div>
           <div class="dose" id="dexLoad">—</div>
         </div>
 
-        <!-- NEW: Dex drip -->
+        <!-- Dex drip -->
         <div class="pill">
           <div>
             <span class="leftTitle">Dexmedetomidine (maintenance drip)</span>
             <span class="hint">(0.2–0.7 mcg/kg/hr LBW)</span>
           </div>
-          <div class="dose" id="dexDrip">—<span class="doseSmall" id="dexDripMl">—</span></div>
+          <div class="dose">
+            <span id="dexDrip">—</span>
+            <span class="doseSmall" id="dexDripMl">—</span>
+          </div>
         </div>
 
         <div class="pill">
@@ -513,13 +525,16 @@
           <div class="dose" id="morph">—</div>
         </div>
 
-        <!-- NEW: Remi drip -->
+        <!-- Remi drip -->
         <div class="pill">
           <div>
             <span class="leftTitle">Remifentanil (drip)</span>
             <span class="hint">(0.05–0.2 mcg/kg/min LBW)</span>
           </div>
-          <div class="dose" id="remiDrip">—<span class="doseSmall" id="remiDripMl">—</span></div>
+          <div class="dose">
+            <span id="remiDrip">—</span>
+            <span class="doseSmall" id="remiDripMl">—</span>
+          </div>
         </div>
 
       </div>
@@ -527,7 +542,7 @@
 
     <!-- 6 Additional info -->
     <div class="section" style="border:none; background:transparent; box-shadow:none;">
-      <div class="secHead" style="background:transparent; padding:12px 2px 8px; font-weight:900;">
+      <div class="secHead" style="background:transparent; padding:12px 2px 8px; font-weight:1000;">
         <div>6. Addition information</div>
         <label class="switch">
           <input type="checkbox" id="togInfo" checked>
@@ -573,7 +588,7 @@
     <footer>
       <div class="warn">DEMO VERSION — all calculations must be rechecked before clinical use.</div>
       <div>Not an official guideline. For education + prototyping only.</div>
-      <div>© 2025 Department of Anesthesiology, Chulalongkorn Hospital • Version 0.2</div>
+      <div>© 2025 Department of Anesthesiology, Chulalongkorn Hospital • Version 0.3</div>
     </footer>
 
   </div>
@@ -622,8 +637,10 @@
     // display helpers
     const r0 = (x) => Math.round(x);
     const one = (x) => Math.round(x*10)/10;
+
     function range(a,b,unit){ return `${r0(a)} - ${r0(b)} ${unit}`; }
     function single(x,unit){ return `${r0(x)} ${unit}`; }
+
     function safeNum(v, fallback){
       const n = Number(v);
       return (Number.isFinite(n) && n>0) ? n : fallback;
@@ -637,9 +654,7 @@
       return "Not obese (BMI < 30)";
     }
 
-    // ---------------------------
     // toggles
-    // ---------------------------
     function bindToggle(togId, bodyId){
       const t = el(togId);
       const b = el(bodyId);
@@ -676,7 +691,7 @@
       el("bmiVal").textContent = one(B);
       el("bmiCat").textContent = bmiCategory(B);
 
-      // Propofol
+      // Propofol (LBW, AdjBW)
       el("propInd").textContent = range(1.5*LBW, 2.5*LBW, "mg");
       const gaLow  = (100*ADJ)*60/1000;  // mcg/kg/min -> mg/hr
       const gaHigh = (200*ADJ)*60/1000;
@@ -686,7 +701,7 @@
       const sedHigh = (100*ADJ)*60/1000;
       el("propSed").textContent = range(sedLow, sedHigh, "mg/hr");
 
-      // Fentanyl
+      // Fentanyl (LBW)
       el("fentBolus").textContent = range(1*LBW, 2*LBW, "mcg");
 
       // NMB
@@ -701,37 +716,33 @@
       el("glyco").textContent = single(0.01*ADJ, "mg");
       el("suga").textContent  = range(2*ADJ, 4*ADJ, "mg");
 
-      // Other meds (LBW-based here)
+      // Other meds (LBW)
       el("eto").textContent   = range(0.2*LBW, 0.3*LBW, "mg");
       el("thio").textContent  = range(3*LBW, 5*LBW, "mg");
       el("keta").textContent  = range(0.5*LBW, 1*LBW, "mg");
       el("mida").textContent  = range(0.05*LBW, 0.1*LBW, "mg");
-
-      // Dex loading
       el("dexLoad").textContent = range(0.5*LBW, 1*LBW, "mcg");
+      el("morph").textContent = range(0.05*LBW, 0.1*LBW, "mg");
 
       // Dex maintenance drip: 0.2–0.7 mcg/kg/hr (LBW)
       const dexLow_mcg_hr = 0.2 * LBW;
       const dexHigh_mcg_hr = 0.7 * LBW;
-      el("dexDrip").firstChild.nodeValue = `${r0(dexLow_mcg_hr)} - ${r0(dexHigh_mcg_hr)} mcg/hr`;
+      el("dexDrip").textContent = `${r0(dexLow_mcg_hr)} - ${r0(dexHigh_mcg_hr)} mcg/hr`;
 
-      const dexConc = safeNum(el("dexConc")?.value, 4); // mcg/mL
+      const dexConc = safeNum(el("dexConc").value, 4); // mcg/mL
       const dexLow_ml_hr = dexLow_mcg_hr / dexConc;
       const dexHigh_ml_hr = dexHigh_mcg_hr / dexConc;
       el("dexDripMl").textContent = `(${one(dexLow_ml_hr)}–${one(dexHigh_ml_hr)} mL/hr @ ${dexConc} mcg/mL)`;
-
-      // Morphine
-      el("morph").textContent = range(0.05*LBW, 0.1*LBW, "mg");
 
       // Remifentanil drip: 0.05–0.2 mcg/kg/min (LBW)
       const remiLow_mcg_min = 0.05 * LBW;
       const remiHigh_mcg_min = 0.2 * LBW;
       const remiLow_mcg_hr = remiLow_mcg_min * 60;
       const remiHigh_mcg_hr = remiHigh_mcg_min * 60;
-      el("remiDrip").firstChild.nodeValue =
-        `${one(remiLow_mcg_min)}–${one(remiHigh_mcg_min)} mcg/min`;
 
-      const remiConc = safeNum(el("remiConc")?.value, 50); // mcg/mL
+      el("remiDrip").textContent = `${one(remiLow_mcg_min)}–${one(remiHigh_mcg_min)} mcg/min`;
+
+      const remiConc = safeNum(el("remiConc").value, 50); // mcg/mL
       const remiLow_ml_hr = remiLow_mcg_hr / remiConc;
       const remiHigh_ml_hr = remiHigh_mcg_hr / remiConc;
       el("remiDripMl").textContent =
