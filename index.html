@@ -36,14 +36,15 @@
       display:flex; align-items:center; justify-content:center;
       gap:12px; margin-bottom:10px;
     }
-    .logo{
-      width:44px; height:44px; border-radius:50%;
-      background:linear-gradient(135deg,#fbbf24,#f59e0b);
-      display:flex; align-items:center; justify-content:center;
-      color:#fff; font-weight:900;
-      box-shadow:0 8px 18px rgba(0,0,0,.12);
-      user-select:none;
+    .logoImg{
+  width:52px;
+  height:52px;
+  border-radius:50%;   /* remove if you want full logo, no circle */
+  object-fit:cover;
+  background:#fff;
+  box-shadow:0 8px 18px rgba(0,0,0,.12);
     }
+
     h1{ margin:0; font-size:20px; text-align:center; }
     .sub{ text-align:center; margin:6px 0 18px; color:var(--muted); font-size:13px; }
 
@@ -208,13 +209,20 @@
 
 <body>
   <div class="wrap">
-    <div class="top">
-      <div class="logo">S</div>
-      <div>
-        <h1>Anesthetics for obese patients</h1>
-        <div class="sub">Demo calculator (BMI ≥ 30). Use clinical judgment.</div>
+  <div class="top">
+    <img src="anesCULogo.png"
+         alt="Chulalongkorn Anesthesiology Logo"
+         class="logoImg">
+    <div>
+      <h1>Anesthetics for obese patients</h1>
+      <div class="sub">
+        Demo calculator (BMI ≥ 30). Use clinical judgment.
       </div>
     </div>
+  </div>
+</div>
+
+
 
     <!-- INPUT CARD -->
     <div class="card">
